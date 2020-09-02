@@ -55,14 +55,6 @@ MQTT Library Design
 */
 
 /**
-@ref mqtt_porting Porting
-*/
-
-/**
-@ref mqtt_migration Migration
-*/
-
-/**
 @page mqtt_config Configurations
 @brief Configurations of the MQTT Library.
 <!-- @par configpagestyle allows the @section titles to be styled according to style.css -->
