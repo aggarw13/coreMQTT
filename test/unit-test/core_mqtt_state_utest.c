@@ -1,5 +1,5 @@
 /*
- * coreMQTT v1.0.1
+ * coreMQTT vv1.1.1
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -183,7 +183,7 @@ void test_MQTT_ReserveState_compactRecords( void )
     validateRecordAt( mqttContext.outgoingPublishRecords, 1, PACKET_ID2, MQTTQoS1, MQTTPublishSend );
 
     /* One free spot.
-     * Pre condition - 1 1 1 0 1 1 1 1 1 1.
+     * Pre condition - 1 1 v1.1.1 1 1 1 1 1.
      * Add an element will try to compact the array and the resulting state
      * should be - 1 1 1 1 1 1 1 1 1 1. */
     fillRecord( mqttContext.outgoingPublishRecords, PACKET_ID2 + 1, MQTTQoS2, MQTTPubRelSend );
@@ -202,9 +202,9 @@ void test_MQTT_ReserveState_compactRecords( void )
     TEST_ASSERT_EQUAL( MQTTNoMemory, status );
 
     /* Alternate free spots.
-     * Pre condition - 1 0 1 0 1 0 1 0 1 0.
+     * Pre condition - v1.1.1 0 v1.1.1 0 1 0.
      * Add an element will skip to compact the array and the resulting state
-     * should be - 1 0 1 0 1 0 1 0 1 1. */
+     * should be - v1.1.1 0 v1.1.1 0 1 1. */
     fillRecord( mqttContext.outgoingPublishRecords, PACKET_ID2 + 1, MQTTQoS2, MQTTPubRelSend );
     /* Invalidate record at alternate indexes starting from 1. */
     mqttContext.outgoingPublishRecords[ 1 ].packetId = MQTT_PACKET_ID_INVALID;
@@ -221,7 +221,7 @@ void test_MQTT_ReserveState_compactRecords( void )
                       MQTTQoS1,
                       MQTTPublishSend );
 
-    /* Array is in state 1 0 1 0 1 0 1 0 1 1.
+    /* Array is in state v1.1.1 0 v1.1.1 0 1 1.
      * Adding one more element should result in array in state
      * 1 1 1 1 1 1 1 0 0 0. */
     status = MQTT_ReserveState( &mqttContext, PACKET_ID2, MQTTQoS1 );
