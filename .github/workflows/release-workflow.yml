@@ -9,8 +9,41 @@ on:
       version_number:
         description: 'Release Version Number (Eg, v1.0.0)'
         required: true
-
+      delete-tag-release-flag:
+        description: 'Configure release workflow to delete existing tag and release (Default: false)'
+        default: false
+        required: false
 jobs:
+  clean-existing-tag-and-release:
+    if: github.event.inputs.delete-tag-release-flag == true
+    runs-on: ubuntu-latest
+    env: 
+      VERSION_NUM: ${{ github.event.inputs.version_number }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check if tag exists
+        run: |
+          git fetch origin
+          if git rev-parse $VERSION_NUM >/dev/null 2>&1
+          then
+              echo "Deleting existing tag for $VERSION_NUM"
+              git push origin --delete tags/$VERSION_NUM
+          else
+              echo "Tag $VERSION_NUM is not present."
+          fi          
+      - name: Check if release exists
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt-get install gh
+          if gh release list | grep $VERSION_NUM
+          then
+              echo "Deleting existing release for $VERSION_NUM"
+              gh release delete --yes $VERSION_NUM
+          else
+              echo "Release for $VERSION_NUM is not present."
+          fi          
   tag-commit:
     name: Tag commit
     runs-on: ubuntu-latest
