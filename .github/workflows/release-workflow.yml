@@ -9,13 +9,13 @@ on:
       version_number:
         description: 'Release Version Number (Eg, v1.0.0)'
         required: true
-      delete-tag-release-flag:
+      test-flag:
         description: 'Configure release workflow to delete existing tag and release (Default: false)'
-        default: false
+        default: true
         required: false
 jobs:
   clean-existing-tag-and-release:
-    if: github.event.inputs.delete-tag-release-flag == true
+    if: github.event.inputs.test-flag == true
     runs-on: ubuntu-latest
     env: 
       VERSION_NUM: ${{ github.event.inputs.version_number }}
