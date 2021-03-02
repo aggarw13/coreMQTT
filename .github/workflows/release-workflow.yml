@@ -15,11 +15,12 @@ on:
         required: false
 jobs:
   clean-existing-tag-and-release:
-    if: github.event.inputs.test-flag == true
     runs-on: ubuntu-latest
     env: 
       VERSION_NUM: ${{ github.event.inputs.version_number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DELETE_FLAG: ${{ github.event.inputs.test-flag }}
+    if: env.DELETE_FLAG == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
