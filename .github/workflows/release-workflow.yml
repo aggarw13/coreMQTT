@@ -50,7 +50,7 @@ jobs:
               echo "Release for $VERSION_NUM is not present."
           fi          
   tag-commit:
-    if: always()
+    if: ${{ github.event.inputs.test_flag == 'true' && success() ||  github.event.inputs.test_flag == 'false' && always() }}
     needs: clean-existing-tag-and-release
     name: Tag commit
     runs-on: ubuntu-latest
