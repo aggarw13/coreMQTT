@@ -28,7 +28,7 @@ jobs:
       - name: Check if tag exists
         run: |
           git fetch origin
-          if git rev-parse $VERSION_NUM >/dev/null 2>&1
+          if git tag --list $VERSION_NUM | grep test-tag
           then
               echo "Deleting existing tag for $VERSION_NUM"
               git push origin --delete tags/$VERSION_NUM
