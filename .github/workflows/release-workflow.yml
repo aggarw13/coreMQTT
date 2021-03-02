@@ -13,11 +13,9 @@ on:
         description: 'Configure release workflow to delete existing tag and release (Default: false)'
         default: false
         required: false
-env:
-  TEST_FLAG : ${{ github.event.inputs.test_flag }}
 jobs:
   clean-existing-tag-and-release:
-    if: ${{ env.TEST_FLAG == true }}
+    if: ${{ github.event.inputs.test_flag == true }}
     runs-on: ubuntu-latest
     env: 
       VERSION_NUM: ${{ github.event.inputs.version_number }}
