@@ -23,13 +23,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.commit_id }}
       - name: Check if tag exists
         run: |
           git fetch origin
-          git rev-parse tags/$VERSION_NUM
-          if [ $? -eq 0 ]
+          if git tag --list $VERSION_NUM
+          then
               echo "Deleting existing tag for $VERSION_NUM"
               git push origin --delete tags/$VERSION_NUM
           fi
