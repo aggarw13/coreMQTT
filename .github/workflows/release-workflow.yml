@@ -28,14 +28,11 @@ jobs:
       - name: Check if tag exists
         run: |
           git fetch origin
-          git rev-parse $VERSION_NUM
+          git rev-parse tags/$VERSION_NUM
           if [ $? -eq 0 ]
-          then
               echo "Deleting existing tag for $VERSION_NUM"
               git push origin --delete tags/$VERSION_NUM
-          else
-              echo "Tag $VERSION_NUM is not present."
-          fi          
+          fi
       - name: Check if release exists
         run: |
           sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -46,9 +43,7 @@ jobs:
           then
               echo "Deleting existing release for $VERSION_NUM"
               gh release delete --yes $VERSION_NUM
-          else
-              echo "Release for $VERSION_NUM is not present."
-          fi          
+          fi
   tag-commit:
     if: ${{ github.event.inputs.test_flag == 'true' && success() ||  github.event.inputs.test_flag == 'false' && always() }}
     needs: clean-existing-tag-and-release
