@@ -13,9 +13,11 @@ on:
         description: 'Configure release workflow to delete existing tag and release (Default: false)'
         default: false
         required: false
+env:
+  TEST_FLAG : ${{ github.event.inputs.test_flag }}
 jobs:
   clean-existing-tag-and-release:
-    if: ${{ github.event.inputs.test_flag }} == true
+    if: env.TEST_FLAG == true
     runs-on: ubuntu-latest
     env: 
       VERSION_NUM: ${{ github.event.inputs.version_number }}
@@ -50,7 +52,7 @@ jobs:
               echo "Release for $VERSION_NUM is not present."
           fi          
   tag-commit:
-    if: ( ${{ github.event.inputs.test_flag }} == 'false' && always() ) || ( ${{ github.event.inputs.test_flag }} == 'true' || success() )
+    if: ( ${{ env.TEST_FLAG }} == false && always() ) || ( ${{ env.TEST_FLAG }} == true || success() )
     needs: clean-existing-tag-and-release
     name: Tag commit
     runs-on: ubuntu-latest
