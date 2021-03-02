@@ -15,7 +15,7 @@ on:
         required: false
 jobs:
   clean-existing-tag-and-release:
-    if: ${{ github.event.inputs.test_flag }} == 'true'
+    if: ${{ github.event.inputs.test_flag }} == true
     runs-on: ubuntu-latest
     env: 
       VERSION_NUM: ${{ github.event.inputs.version_number }}
@@ -49,6 +49,7 @@ jobs:
               echo "Release for $VERSION_NUM is not present."
           fi          
   tag-commit:
+    if: ( ${{ github.event.inputs.test_flag }} == 'false' && always() ) || ( ${{ github.event.inputs.test_flag }} == 'true' || success() )
     needs: clean-existing-tag-and-release
     name: Tag commit
     runs-on: ubuntu-latest
