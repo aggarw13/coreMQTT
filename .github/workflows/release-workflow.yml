@@ -21,6 +21,10 @@ jobs:
       VERSION_NUM: ${{ github.event.inputs.version_number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.commit_id }}
       - name: Check if tag exists
         run: |
           git fetch origin
@@ -45,6 +49,7 @@ jobs:
               echo "Release for $VERSION_NUM is not present."
           fi          
   tag-commit:
+    needs: clean-existing-tag-and-release
     name: Tag commit
     runs-on: ubuntu-latest
     steps:
