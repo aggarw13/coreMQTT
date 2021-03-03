@@ -67,7 +67,7 @@ jobs:
           git diff ${{ github.event.inputs.commit_id }} tags/${{ github.event.inputs.version_number }}
   create-zip:
     if: success()
-    needs: tag-commit
+    #needs: [tag-commit]
     name: Create ZIP and verify package for release asset.
     runs-on: ubuntu-latest
     steps:
@@ -118,7 +118,7 @@ jobs:
           path: zip-check/coreMQTT-${{ github.event.inputs.version_number }}.zip
   create-release:
     if: success()
-    needs: create-zip
+    #needs: [tag-commit, create-zip]
     name: Create Release and Upload Release Asset
     runs-on: ubuntu-latest
     steps:
